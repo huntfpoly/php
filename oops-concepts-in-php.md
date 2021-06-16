@@ -2,14 +2,15 @@ Tiếp tục với series Hướng đối tượng trong Php. Hôm nay mình s�
 
 ## Table of Content 📃
 
-- [1. Tính kế thừa](#inheritance)
-- [2. Tính đóng gói ](#encapsulation)
-- [3. Tính trừu tượng](#abstraction)
-  - [3.1. Abstract class](#31-abstract-class)
-  - [3.2. Interface](#32-interface)
-  - [3.3. Khách nhau giữa Abstract và Interface](#33-different)
-  - [3.4. Khi nào dùng Abstract class và khi nào dùng Interface](#34-how-to-use)
-- [4. Tính đa hình](#polymorphism)
+- [1. Tính kế thừa](#1-inheritance)
+- [2. Tính trừu tượng](#-2abstraction)
+  - [2.1. Abstract class](#21-abstract-class)
+  - [2.2. Interface](#22-interface)
+  - [2.3. Khách nhau giữa Abstract và Interface](#23-different)
+  - [2.4. Khi nào dùng Abstract class và khi nào dùng Interface](#24-how-to-use)
+- [3. Tính đóng gói ](#3-encapsulation)
+- [4. Tính đa hình](#4-polymorphism)
+- [5. Bài tập thực hành](#5-exercise)
 
 Lập trình hướng đối tượng có 4 tính chất chính:
 
@@ -18,7 +19,7 @@ Lập trình hướng đối tượng có 4 tính chất chính:
 - Tính trìu tượng (abstraction).
 - Tính đa hình (polymorphism).
 
-# Inheritance
+# 1. Inheritance
 
 **Tính kế thừa** trong OOP cho phép một class có thể kế thừa các thuộc tính và phương thức từ các class khác đã được định nghĩa. Lớp được kế thừa còn được gọi là class cha và lớp kế thừa được gọi là class con. Mục đích chính của việc `Kế thừa` là:
 
@@ -71,118 +72,7 @@ Lập trình hướng đối tượng có 4 tính chất chính:
 
 ---
 
-# Encapsulation
-
-**Tính Đóng gói** - điều này liên quan đến việc ẩn các thuộc tính và chỉ để lộ các phương thức. Mục đích chính của việc đóng gói là:
-
-- Giảm độ phức tạp khi phát triển phần mềm - bằng cách ẩn các thuộc tính và chỉ để lộ các phương thức, việc sử dụng một lớp trở nên dễ dàng.
-- Bảo vệ trạng thái bên trong của một đối tượng - quyền truy cập vào các thuộc tính lớp thông qua các phương thức như **_get_** và **_set_**, điều này làm cho lớp linh hoạt và dễ bảo trì.
-- Việc triển khai nội bộ của lớp có thể được thay đổi mà không cần lo lắng về việc phá vỡ code khi sử dụng lớp.
-
-Trong PHP việc đóng gói được thực hiện nhờ sử dụng các từ khoá `public`, `private` và `protected`:
-
-- `Private` là giới hạn hẹp nhất của thuộc tính và phương thức trong hướng đối tượng.
-
-  - Khi các thuộc tính và phương thức khai báo với visibility là `private` thì các thuộc tính phương thức đó **chỉ có thể sử dụng được trong class đó**
-  - Bên ngoài class **không thể** nào có thể sử dụng được nó kể cả lớp kế thừa nó cũng không sử dụng được
-  - Nếu muốn lấy giá trị hoặc gán giá trị ở bên ngoài class thì chúng ta phải thông qua hai hàm **SET** và **GET**.
-
-- `protected` là được sử dụng trong class đó và các class con kết thừa từ nó, nhưng bên ngoài class thì không sử dụng được.
-
-- `Public ` có mức độ truy cập toàn cục
-
-  - khi khai báo với visibility `public` thì trong hay ngoài class đều sử dụng được.
-  - Thông thường khi không khai báo visibility thì chương trình dịch tự nhận nó là `public` nhưng để cho đúng chuẩn thì mọi người lên khai báo từ khóa này vào thay vì bỏ trống.
-
-  _Để hiểu rõ hơn thì ta có ví dụ sau:_
-  **_Ví dụ 1: không kế thừa_**
-
-  ```php
-    class Parent
-  {
-    public $public = 'Tôi là Public';
-    protected $protected = 'Tôi là Protected';
-    private $private = 'Tôi là Private';
-
-    function printHello()
-    {
-        echo $this->public;
-        echo $this->protected;
-        echo $this->private;
-    }
-  }
-  $obj = new Parent();
-  // phần 1
-  echo $obj->public; // Tôi là Public
-  // phân 2
-  echo $obj->protected; // Fatal Error
-  // phần 3
-  echo $obj->private; // Fatal Error
-  // phần 4
-  $obj->printHello(); // Tôi là PublicTôi là ProtectedTôi là Private
-  ```
-
-_Giải thích:_
-
-- Đầu tiên ta tạo ra 1 object **$obj** từ class **Parent**
-- **Phần 1** ta truy cập tới thuộc tính **public** với visibility `public` và nó in ra màn hình giá trị **public**
-- Với **Phần 2** và **Phần 3** thì nó lại báo lỗi **falal error** bởi vì nó k cho phép **bên ngoài class** truy cập vào thuộc tính có visibility `protected` và `private`
-- Nhưng với `Phần 4` ta gọi phương thức **printHello()** thì nó lại in ra tất cả giá trị của thuộc tính trong class. Vì phương thức có trạng thái public và có thể truy cập từ bên ngoài, **printHello()** bên trong class nên gọi tới được tới tất cả các thuộc tính.
-
-**_Ví dụ 2: có kế thừa_**
-
-```php
-class ParentClass
-{
-  public $public = 'Public Parent';
-  protected $protected = 'Protected Parent';
-  private $private = 'Private Parent';
-
-  function printHello()
-  {
-      echo $this->public;
-      echo $this->protected;
-      echo $this->private;
-  }
-}
-// Định nghĩa class  Kế thừa
-class Child extends ParentClass
-{
-  // Khai báo lại thuộc tính public và protected
-  public $public = 'Public Child';
-  protected $protected = 'Protected Child';
-
-  // Khai báo lại (override) function printHello
-  function printHello()
-  {
-      echo $this->public;
-      echo $this->protected;
-      echo $this->private;
-  }
-}
-
-$obj2 = new Child();
-// Phần 1
-echo $obj2->public; // Public Child
-// Phần 2
-echo $obj2->protected; // Fatal Error
-// Phần 3
-echo $obj2->private; // Undefined Property
-$obj2->printHello(); // Public Child, Protected Child, Undefined Property
-```
-
-_Giải thích:_
-
-- Khởi tạo đối tượng obj2 từ class **Child** được kế thừa từ class **ParentClass** với các thuộc tính được override trong class **Child** là **$public** và **$protected**
-- **echo** các thuộc tính thì ta thấy chỉ hiện thị thuộc tính có visibility là `public` (giống với ví dụ trên) và giá trị được ghi đề bởi tính chất **Kế Thừa**.
-- **Phần 1** và **Phần 2** hiển thị kết quả đều giống _ví dụ 1_, còn **Phần 3** nó báo **Undefined Property** (là thuộc tính chưa được định nghĩa).
-- Vây rõ ràng là đối với kế thừa thì ta cũng k thể truy cập vào được thuộc tính và phương thức của class Cha với visibility là `protected`
-- **Phần 4** thì cũng tương tự như ví dụ trên thôi nhé
-- bạn thử cho function **printHello()** thực thi từng **echo** bên trong với các thuộc tính thì rõ nha.;)
-
----
-
-# Abstraction
+# 2. Abstraction
 
 **Trìu tượng hóa** (Abstract) là quá trình đơn giản hóa một đối tượng mà trong đó chỉ bao gồm những đặc điểm quan tâm và bỏ qua những đặc điểm chi tiết nhỏ (hay là không sử dụng).
 
@@ -192,7 +82,7 @@ _Giải thích:_
 
 Để hiểu rõ về tính trìu tượng chúng ta sẽ tìm hiểu về `Abstract class` và `Interface`.
 
-### 3.1 Abstract class
+### 2.1 Abstract class
 
 Để khai báo một lớp Abstract ta dùng cú pháp sau:
 
@@ -358,7 +248,7 @@ _Giải thích:_
 - Các lớp **Audi**, **Volvo** và **Mercedes** được kế thừa từ lớp **Car**. Nghĩa là các lớp **Audi**, **Volvo** và **Mercedes** có thể sử dụng thuộc tính **public \$name** cũng như phương thức **public \_\_construct ()** từ lớp **Car** vì **tính kế thừa**.
 - Function **intro()** là một phương thức trừu tượng nên được định nghĩa trong tất cả các lớp con và chúng phải trả về một chuỗi.
 
-### 3.2 Interface
+### 2.2 Interface
 
 - `Interface` không phải là 1 lớp. Nó được mô tả như là 1 bản thiết kế cho các class có chung cách thức hoạt động.
 - Vì không phải là 1 lớp nên không thể định nghĩa các thuộc tính, khởi tạo đối tượng mà chỉ khai báo các phương thức.
@@ -400,7 +290,7 @@ $car = new Car();
 $car->run(); // Xe hơi chạy bằng 4 bánh
 ```
 
-### 3.3 Different
+### 2.3 Different
 
 | Interface                                                                                                                          | Abstract class                                                                                                                                                                                          |
 | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -412,7 +302,7 @@ $car->run(); // Xe hơi chạy bằng 4 bánh
 | Cần thời gian để tìm phương thức thực tế tương ứng với lớp dẫn đến thời gian chậm hơn 1 chút.                                      | Nhanh hơn so với interface.                                                                                                                                                                             |
 | Khi ta thêm mới 1 khai báo. Ta phải tìm hết tất cả những lớp có thực thi interface này để định nghĩa nội dung cho phương thức mới. | Đối với abstract class, khi đĩnh nghĩa 1 phương thức mới ta hoàn toàn có thể định nghĩa nội dung phương thức là rỗng hoặc những thực thi mặc định nào đó. Vì thế toàn bộ hệ thống vẫn chạy bình thường. |
 
-### 3.4 How to use?
+### 2.4 How to use?
 
 - Nhìn chung `abstract class` và `interface` đều được coi như 1 "bản thiết kế" cho các class con kế thừa nó.
   > Vì sao lại gọi là "bản thiết kế"?
@@ -434,6 +324,117 @@ $car->run(); // Xe hơi chạy bằng 4 bánh
 
 > - `Abstract` thường được sử dụng trong trường hợp các class kế thừa từ nó có cùng bản chất (thuộc 1 nhóm đối tượng)
 > - `Interface` thường được sử dụng trong trường hợp các class kế thừa không có cùng bản chất (nhóm đối tượng) nhưng chúng có thể thực hiện các hành động giống nhau.
+
+---
+
+# Encapsulation
+
+**Tính Đóng gói** - điều này liên quan đến việc ẩn các thuộc tính và chỉ để lộ các phương thức. Mục đích chính của việc đóng gói là:
+
+- Giảm độ phức tạp khi phát triển phần mềm - bằng cách ẩn các thuộc tính và chỉ để lộ các phương thức, việc sử dụng một lớp trở nên dễ dàng.
+- Bảo vệ trạng thái bên trong của một đối tượng - quyền truy cập vào các thuộc tính lớp thông qua các phương thức như **_get_** và **_set_**, điều này làm cho lớp linh hoạt và dễ bảo trì.
+- Việc triển khai nội bộ của lớp có thể được thay đổi mà không cần lo lắng về việc phá vỡ code khi sử dụng lớp.
+
+Trong PHP việc đóng gói được thực hiện nhờ sử dụng các từ khoá `public`, `private` và `protected`:
+
+- `Private` là giới hạn hẹp nhất của thuộc tính và phương thức trong hướng đối tượng.
+
+  - Khi các thuộc tính và phương thức khai báo với visibility là `private` thì các thuộc tính phương thức đó **chỉ có thể sử dụng được trong class đó**
+  - Bên ngoài class **không thể** nào có thể sử dụng được nó kể cả lớp kế thừa nó cũng không sử dụng được
+  - Nếu muốn lấy giá trị hoặc gán giá trị ở bên ngoài class thì chúng ta phải thông qua hai hàm **SET** và **GET**.
+
+- `protected` là được sử dụng trong class đó và các class con kết thừa từ nó, nhưng bên ngoài class thì không sử dụng được.
+
+- `Public ` có mức độ truy cập toàn cục
+
+  - khi khai báo với visibility `public` thì trong hay ngoài class đều sử dụng được.
+  - Thông thường khi không khai báo visibility thì chương trình dịch tự nhận nó là `public` nhưng để cho đúng chuẩn thì mọi người lên khai báo từ khóa này vào thay vì bỏ trống.
+
+  _Để hiểu rõ hơn thì ta có ví dụ sau:_
+  **_Ví dụ 1: không kế thừa_**
+
+  ```php
+    class Parent
+  {
+    public $public = 'Tôi là Public';
+    protected $protected = 'Tôi là Protected';
+    private $private = 'Tôi là Private';
+
+    function printHello()
+    {
+        echo $this->public;
+        echo $this->protected;
+        echo $this->private;
+    }
+  }
+  $obj = new Parent();
+  // phần 1
+  echo $obj->public; // Tôi là Public
+  // phân 2
+  echo $obj->protected; // Fatal Error
+  // phần 3
+  echo $obj->private; // Fatal Error
+  // phần 4
+  $obj->printHello(); // Tôi là PublicTôi là ProtectedTôi là Private
+  ```
+
+_Giải thích:_
+
+- Đầu tiên ta tạo ra 1 object **$obj** từ class **Parent**
+- **Phần 1** ta truy cập tới thuộc tính **public** với visibility `public` và nó in ra màn hình giá trị **public**
+- Với **Phần 2** và **Phần 3** thì nó lại báo lỗi **falal error** bởi vì nó k cho phép **bên ngoài class** truy cập vào thuộc tính có visibility `protected` và `private`
+- Nhưng với `Phần 4` ta gọi phương thức **printHello()** thì nó lại in ra tất cả giá trị của thuộc tính trong class. Vì phương thức có trạng thái public và có thể truy cập từ bên ngoài, **printHello()** bên trong class nên gọi tới được tới tất cả các thuộc tính.
+
+**_Ví dụ 2: có kế thừa_**
+
+```php
+class ParentClass
+{
+  public $public = 'Public Parent';
+  protected $protected = 'Protected Parent';
+  private $private = 'Private Parent';
+
+  function printHello()
+  {
+      echo $this->public;
+      echo $this->protected;
+      echo $this->private;
+  }
+}
+// Định nghĩa class  Kế thừa
+class Child extends ParentClass
+{
+  // Khai báo lại thuộc tính public và protected
+  public $public = 'Public Child';
+  protected $protected = 'Protected Child';
+
+  // Khai báo lại (override) function printHello
+  function printHello()
+  {
+      echo $this->public;
+      echo $this->protected;
+      echo $this->private;
+  }
+}
+
+$obj2 = new Child();
+// Phần 1
+echo $obj2->public; // Public Child
+// Phần 2
+echo $obj2->protected; // Fatal Error
+// Phần 3
+echo $obj2->private; // Undefined Property
+$obj2->printHello(); // Public Child, Protected Child, Undefined Property
+```
+
+_Giải thích:_
+
+- Khởi tạo đối tượng obj2 từ class **Child** được kế thừa từ class **ParentClass** với các thuộc tính được override trong class **Child** là **$public** và **$protected**
+- **echo** các thuộc tính thì ta thấy chỉ hiện thị thuộc tính có visibility là `public` (giống với ví dụ trên) và giá trị được ghi đề bởi tính chất **Kế Thừa**.
+- **Phần 1** và **Phần 2** hiển thị kết quả đều giống _ví dụ 1_, còn **Phần 3** nó báo **Undefined Property** (là thuộc tính chưa được định nghĩa).
+- Vây rõ ràng là đối với kế thừa thì ta cũng k thể truy cập vào được thuộc tính và phương thức của class Cha với visibility là `protected`
+- **Phần 4** thì cũng tương tự như ví dụ trên thôi nhé
+- bạn thử cho function **printHello()** thực thi từng **echo** bên trong với các thuộc tính thì rõ nha.;)
 
 ---
 
@@ -500,3 +501,19 @@ echo $rectangle->area() . "\n"; // 20
 echo $square->area() . "\n"; // 16
 
 ```
+
+---
+
+# 5. Exercise
+
+**Bài 1**: Tạo class **Product** và khởi tạo đối tượng **Product1** từ class **Product**
+
+**Bài 2**: Thêm các thuộc tính cho class **Product** như **\$name**, **\$color**, **\$price**, **\$description**,... Khởi tạo các đối tượng từ **Product** có giá trị thuộc tính khác nhau và in ra màn hình các thuộc tính đó.
+
+**Bài 3**: Thêm phương thức khởi tạo cho **Product** (_\_\_construct_) với các tham số truyền vào là **\$name**... (các thuộc tính ở bài 2). Sau đó khởi tạo 2 đối tượng **\$product1**, **\$product2**
+
+**Bài 4:** Tạo class **Phone**, **Car**... kế thừa từ class **Product**. Thay đổi Visibility của các thuộc tính và phương thức, sử dụng các phương thức **get** **set** để thay đổi, xuất các giá trị của các thuộc tính có visibility là `protected` và `private`
+
+**Bài 5**: thêm phương thức tính **discount**, **getInfo** (xuất thông tin của đối tượng) cho các **Phone**, **Car**... Nếu **price** lớn hơn 1000 giảm 5%, lớn hơn 200 giảm 10%, lớn hơn 3000 giảm 15%. Khởi tạo các đối tượng từ class **Phone**, **Car** và xuất thông tin ra màn hình
+
+**Bài 6\*** Chuyển class **Product** thành **_abstract class_** và xuất thông tin ra màn hình
