@@ -3,10 +3,10 @@ Tiếp tục với series Hướng đối tượng trong Php. Hôm nay mình s�
 ## Table of Content 📃
 
 - [1. Tính kế thừa](#1-inheritance)
-- [2. Tính trừu tượng](#-2abstraction)
+- [2. Tính trừu tượng](#2-abstraction)
   - [2.1. Abstract class](#21-abstract-class)
   - [2.2. Interface](#22-interface)
-  - [2.3. Khách nhau giữa Abstract và Interface](#23-different)
+  - [2.3. Khác nhau giữa Abstract và Interface](#23-different)
   - [2.4. Khi nào dùng Abstract class và khi nào dùng Interface](#24-how-to-use)
 - [3. Tính đóng gói ](#3-encapsulation)
 - [4. Tính đa hình](#4-polymorphism)
@@ -42,11 +42,11 @@ Lập trình hướng đối tượng có 4 tính chất chính:
   $obj->getName(); // Parent class
   ```
 
-  - ta dịnh nghĩa class **childClass** kế thừa từ class **parentClass** đã được định nghĩa trước.
+  - ta định nghĩa class **childClass** kế thừa từ class **parentClass** đã được định nghĩa trước.
   - trong class **childClass** ta để trống và khởi tạo đối tượng **\$obj** và truy cập tới thuộc tính **\$name** và function **getName()** của class cha thì nó in ra là "Parent class"
   - Như vậy class con có thể sử dụng thuộc tính và phương thức của class cha
 
-- Tính chất **Kế thừa** cho phép ta ghi đề (override) các thuộc tính và phương thức của class cha với [visibility](https://www.php.net/manual/en/language.oop5.visibility.php) là `puclic` và `protected` (_đừng lo, ta sẽ tìm hiểu ngay phần dưới thôi_)
+- Tính chất **Kế thừa** cho phép ta ghi đề (override) các thuộc tính và phương thức của class cha với [visibility](https://www.php.net/manual/en/language.oop5.visibility.php) là `public` và `protected` (_đừng lo, ta sẽ tìm hiểu ngay phần dưới thôi_)
 
   ```php
   class parentClass {
@@ -108,7 +108,6 @@ abstract class BaseClass
     {
         echo 1;
     }
-
 }
 // PHP Fatal error:  Abstract function BaseClass::hello() cannot contain body
 ```
@@ -159,7 +158,7 @@ abstract class BaseClass
 }
 ```
 
-Lớp kế thừa từ lớp Abstracth phải Rewrite lại tất cả các hàm Abstract trong lớp Abstract, nếu không sẽ bị báo sai. Ví dụ:
+Lớp kế thừa từ lớp Abstract phải Rewrite lại tất cả các hàm Abstract trong lớp Abstract, nếu không sẽ bị báo sai. Ví dụ:
 
 ```php
 abstract class Person
@@ -327,7 +326,7 @@ $car->run(); // Xe hơi chạy bằng 4 bánh
 
 ---
 
-# Encapsulation
+# 3. Encapsulation
 
 **Tính Đóng gói** - điều này liên quan đến việc ẩn các thuộc tính và chỉ để lộ các phương thức. Mục đích chính của việc đóng gói là:
 
@@ -382,7 +381,7 @@ _Giải thích:_
 
 - Đầu tiên ta tạo ra 1 object **$obj** từ class **Parent**
 - **Phần 1** ta truy cập tới thuộc tính **public** với visibility `public` và nó in ra màn hình giá trị **public**
-- Với **Phần 2** và **Phần 3** thì nó lại báo lỗi **falal error** bởi vì nó k cho phép **bên ngoài class** truy cập vào thuộc tính có visibility `protected` và `private`
+- Với **Phần 2** và **Phần 3** thì nó lại báo lỗi **fatal error** bởi vì nó k cho phép **bên ngoài class** truy cập vào thuộc tính có visibility `protected` và `private`
 - Nhưng với `Phần 4` ta gọi phương thức **printHello()** thì nó lại in ra tất cả giá trị của thuộc tính trong class. Vì phương thức có trạng thái public và có thể truy cập từ bên ngoài, **printHello()** bên trong class nên gọi tới được tới tất cả các thuộc tính.
 
 **_Ví dụ 2: có kế thừa_**
@@ -429,7 +428,7 @@ $obj2->printHello(); // Public Child, Protected Child, Undefined Property
 
 _Giải thích:_
 
-- Khởi tạo đối tượng obj2 từ class **Child** được kế thừa từ class **ParentClass** với các thuộc tính được override trong class **Child** là **$public** và **$protected**
+- Khởi tạo đối tượng obj2 từ class **Child** được kế thừa từ class **ParentClass** với các thuộc tính được override trong class **Child** là **\$public** và **\$protected**
 - **echo** các thuộc tính thì ta thấy chỉ hiện thị thuộc tính có visibility là `public` (giống với ví dụ trên) và giá trị được ghi đề bởi tính chất **Kế Thừa**.
 - **Phần 1** và **Phần 2** hiển thị kết quả đều giống _ví dụ 1_, còn **Phần 3** nó báo **Undefined Property** (là thuộc tính chưa được định nghĩa).
 - Vây rõ ràng là đối với kế thừa thì ta cũng k thể truy cập vào được thuộc tính và phương thức của class Cha với visibility là `protected`
@@ -438,7 +437,7 @@ _Giải thích:_
 
 ---
 
-# Polymorphism
+# 4. Polymorphism
 
 - `Tính đa hình` trong oop là sự đa hình của mỗi hành động cụ thể ở những đối tượng khác nhau. Ví dụ hành động tính chu vi, diện tích của các hình trong hình học là khác nhau...
 - `Đa hình` là quá trình sử dụng một toán tử hoặc hàm theo những cách khác nhau để nhập dữ liệu khác nhau. Về mặt thực tế, tính đa hình có nghĩa là nếu lớp con kế thừa từ lớp cha, thì nó không cần thiết phải kế thừa mọi thứ từ lớp cha
